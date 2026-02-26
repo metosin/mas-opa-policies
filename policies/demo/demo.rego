@@ -5,7 +5,7 @@ import data.common
 default allow := false
 
 # Allow requests under size limit from authenticated users
-allow {
+allow if {
 	common.is_authenticated
 	input.content_length <= 102400
 }
