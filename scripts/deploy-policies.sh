@@ -57,7 +57,7 @@ HTTP_STATUS=$(echo "$VERIFY" | tail -1 | sed 's/HTTP_STATUS://')
 BODY=$(echo "$VERIFY" | sed '$d')
 
 if [ "$HTTP_STATUS" = "200" ]; then
-  POLICY_COUNT=$(echo "$BODY" | grep -o '"id"' | wc -l | tr -d ' ')
+  POLICY_COUNT=$(echo "$BODY" | tr ',' '\n' | grep -c '"id"' || echo "0")
   echo "    ${POLICY_COUNT} policies loaded in OPA."
 else
   echo "    ERROR verifying policies (HTTP ${HTTP_STATUS}): ${BODY}"
