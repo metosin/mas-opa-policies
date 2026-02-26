@@ -1,0 +1,20 @@
+when:
+  event: push
+
+steps:
+  - name: test
+    image: openpolicyagent/opa:latest
+    commands:
+      - opa test policies/ policies_test/ -v
+
+  - name: deploy
+    image: alpine:latest
+    environment:
+      OPA_API_TOKEN:
+        from_secret: opa_api_token
+    commands:
+      - apk add --no-cache curl
+      - chmod +x scripts/deploy-policies.sh
+      - ./scripts/deploy-policies.sh
+    when:
+      branch: main
